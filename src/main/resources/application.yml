@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: cloudflex-blog
+
+  profiles:
+    active: local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cloudflex_db
+    username: cloudflex_user
+    password: cloudflex_pass
+    driver-class-name: org.postgresql.Driver
+
+  sql:
+    init:
+      platform: postgres
+      mode: always
+
+  mybatis:
+    type-aliases-package: com.cloudflex_blog.entity
+    mapper-locations: classpath:mapper/**/*.xml
+    configuration:
+      map-underscore-to-camel-case: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
