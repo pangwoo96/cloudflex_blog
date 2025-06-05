@@ -1,5 +1,6 @@
 package com.cloudflex_blog.modules.user.infrastructure.jwt;
 
+import com.cloudflex_blog.modules.user.exception.exception.UserException;
 import com.cloudflex_blog.modules.user.infrastructure.redis.RedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -13,6 +14,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+
+import static com.cloudflex_blog.modules.user.exception.errorcode.UserErrorCode.REFRESH_TOKEN_EXPIRED;
 
 @Component
 public class JwtUtil {
@@ -115,15 +118,15 @@ public class JwtUtil {
 //                .build();
 //    }
 //
-//    /**
-//     * 토큰 재발급 시 기존 폐기된 리프레시 토큰이 사용되었는지 확인하는 로직
-//     * @param refreshToken
-//     */
-//    public void validateRefreshTokenBlackList(String refreshToken) {
-//        String key = redisService.get("blacklist:refresh:" + refreshToken);
-//        if (StringUtils.hasText(key)) {
-//            throw new UserException(EXPIRED_REFRESH_TOKEN);
-//        }
-//    }
+    /**
+     * 토큰 재발급 시 기존 폐기된 리프레시 토큰이 사용되었는지 확인하는 로직
+     * @param refreshToken
+     */
+    public void validateRefreshTokenBlackList(String refreshToken) {
+        String key = redisService.get("blacklist:refresh:" + refreshToken);
+        if (StringUtils.hasText(key)) {
+            throw new UserException(REFRESH_TOKEN_EXPIRED);
+        }
+    }
 
 }
