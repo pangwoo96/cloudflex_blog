@@ -9,7 +9,6 @@ spring:
     import:
       - optional:file:.env
 
-
   datasource:
     url: jdbc:postgresql://localhost:5432/cloudflex_db
     username: cloudflex_user
@@ -21,13 +20,18 @@ spring:
       platform: postgres
       mode: always
 
-  mybatis:
-    type-aliases-package: com.cloudflex_blog.modules.post.domain.entity, com.cloudflex_blog.modules.user.domain.entity
-    mapper-locations: classpath:mapper/**/*.xml
-    configuration:
-      map-underscore-to-camel-case: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 server:
   port: 8080
   servlet:
     context-path: /api
+
+mybatis:
+  mapper-locations: "classpath:/mapper/**/*.xml"
+  type-aliases-package: com.cloudflex_blog.modules.user.domain.entity, com.cloudflex_blog.modules.post.domain.entity
+  configuration:
+    map-underscore-to-camel-case: true
