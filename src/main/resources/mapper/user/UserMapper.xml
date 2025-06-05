@@ -11,4 +11,16 @@
         VALUES (#{username}, #{password});
     </insert>
 
+    <select id="findUserByUsername" parameterType="string" resultType="com.cloudflex_blog.modules.user.domain.entity.User">
+        SELECT
+            user_id AS userId,
+            username,
+            password,
+            role,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM users
+        WHERE username = #{username}
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.cloudflex_blog.modules.user.infrastructure.jwt;
 
+import com.cloudflex_blog.modules.user.domain.enums.Role;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,11 +20,7 @@ public class JwtProvider {
     private final JwtParser jwtParser;
 
     private static final String USERNAME = "username";
-    private static final String NICKNAME_CLAIM = "nickname";
-    private static final String EMAIL_CLAIM = "email";
-    private static final String NAME_CLAIM = "name";
     private static final String ROLE = "role";
-    private static final String TYPE = "type";
 
     @Value("${JWT_ACCESS_EXPIRATION}")
     private Long accessTokenExpiration;
@@ -39,38 +36,33 @@ public class JwtProvider {
         );
         this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
     }
-//    public String createToken(JwtTokenReqDto reqDto, Long expiredMs, String type) {
-//        Date now = new Date();
-//        return Jwts.builder()
-//                .subject(String.valueOf(reqDto.getUserId()))
-//                .claim(USERNAME, reqDto.getUsername())
-//                .claim(NICKNAME_CLAIM, reqDto.getNickname())
-//                .claim(EMAIL_CLAIM, reqDto.getEmail())
-//                .claim(NAME_CLAIM, reqDto.getName())
-//                .claim(ROLE, reqDto.getRole())
-//                .claim(TYPE, type)
-//                .issuedAt(now)
-//                .expiration(new Date(now.getTime() + expiredMs))
-//                .signWith(secretKey)
-//                .compact();
-//    }
-//
-//    /**
-//     * Access Token 생성 로직
-//     * @param dto
-//     * @return AccessToken
-//     */
-//    public String createAccessToken(JwtTokenReqDto dto) {
-//        return createToken(dto, accessTokenExpiration, "access");
-//    }
-//
-//    /**
-//     * Refresh Token 생성 로직
-//     * @param dto
-//     * @return Refresh Token
-//     */
-//    public String createRefreshToken(JwtTokenReqDto dto) {
-//        return createToken(dto, refreshTokenExpiration, "refresh");
-//    }
+    public String createToken(String username, Long expiredMs, String role) {
+        Date now = new Date();
+        return Jwts.builder()
+                .subject(String.valueOf(username))
+                .claim(ROLE, role)
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + expiredMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    /**
+     * Access Token 생성 로직
+     * @param username
+     * @return AccessToken
+     */
+    public String createAccessToken(String username, Role role) {
+        return createToken(username, accessTokenExpiration, role.name());
+    }
+
+    /**
+     * Refresh Token 생성 로직
+     * @param username
+     * @return Refresh Token
+     */
+    public String createRefreshToken(String username, Role role) {
+        return createToken(username, refreshTokenExpiration, role.name());
+    }
 
 }
