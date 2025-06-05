@@ -17,7 +17,7 @@ spring:
       mode: always
 
   mybatis:
-    type-aliases-package: com.cloudflex_blog.entity
+    type-aliases-package: com.cloudflex_blog.modules.post.domain.entity, com.cloudflex_blog.modules.user.domain.entity
     mapper-locations: classpath:mapper/**/*.xml
     configuration:
       map-underscore-to-camel-case: true
