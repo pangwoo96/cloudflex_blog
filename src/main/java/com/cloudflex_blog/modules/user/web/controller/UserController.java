@@ -4,7 +4,7 @@ import com.cloudflex_blog.modules.user.application.service.UserService;
 import com.cloudflex_blog.modules.user.web.dto.request.LoginReqDto;
 import com.cloudflex_blog.modules.user.web.dto.request.LogoutReqDto;
 import com.cloudflex_blog.modules.user.web.dto.request.SignUpReqDto;
-import com.cloudflex_blog.modules.user.web.dto.response.LoginResponseDto;
+import com.cloudflex_blog.modules.user.web.dto.response.LoginResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +32,8 @@ public class UserController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(LoginReqDto reqDto) {
-        LoginResponseDto resDto = userService.login(reqDto);
+    public ResponseEntity<LoginResDto> login(LoginReqDto reqDto) {
+        LoginResDto resDto = userService.login(reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(resDto);
     }
 

@@ -47,33 +47,9 @@ public class JwtUtil {
         return parseAllClaims(token).get("username", String.class);
     }
 
-    // Nickname 추출
-    public String getNickname(String token) {
-        return parseAllClaims(token).get("nickname", String.class);
-    }
-
-    // Email 추출
-    public String getEmail(String token) {
-        return parseAllClaims(token).get("email", String.class);
-    }
-
-    // Name 추출
-    public String getName(String token) {
-        return parseAllClaims(token).get("name", String.class);
-    }
-
-    // Token Type 추출 (Access/Refresh)
-    public String getTokenType(String token) {
-        return parseAllClaims(token).get("type", String.class);
-    }
-
+    // Role 추출
     public String getRole(String token) {
         return parseAllClaims(token).get("role", String.class);
-    }
-
-    // 토큰 발급시간(IssuedAt) 추출
-    public Date getIssuedAt(String token) {
-        return parseAllClaims(token).getIssuedAt();
     }
 
     // 토큰 만료시간(Expiration) 추출

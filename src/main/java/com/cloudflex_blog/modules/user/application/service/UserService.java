@@ -10,9 +10,10 @@ import com.cloudflex_blog.modules.user.infrastructure.redis.RedisService;
 import com.cloudflex_blog.modules.user.web.dto.request.LoginReqDto;
 import com.cloudflex_blog.modules.user.web.dto.request.LogoutReqDto;
 import com.cloudflex_blog.modules.user.web.dto.request.SignUpReqDto;
-import com.cloudflex_blog.modules.user.web.dto.response.LoginResponseDto;
+import com.cloudflex_blog.modules.user.web.dto.response.LoginResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.cloudflex_blog.modules.user.exception.errorcode.UserErrorCode.PASSWORD_NOT_CORRECT;
 import static com.cloudflex_blog.modules.user.exception.errorcode.UserErrorCode.USER_NOT_FOUND;
@@ -26,6 +27,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final RedisService redisService;
 
+    @Transactional
     public void signUp(SignUpReqDto reqDto) {
         String username = reqDto.getUsername();
         String password = reqDto.getPassword();
@@ -34,7 +36,8 @@ public class UserService {
         userMapper.save(user);
     }
 
-    public LoginResponseDto login(LoginReqDto reqDto) {
+    @Transactional
+    public LoginResDto login(LoginReqDto reqDto) {
 
         String username = reqDto.getUsername();
         String password = reqDto.getPassword();
@@ -52,13 +55,13 @@ public class UserService {
         String accessToken = jwtProvider.createAccessToken(username, Role.USER);
         String refreshToken = jwtProvider.createRefreshToken(username, Role.USER);
 
-        return LoginResponseDto.builder()
+        return LoginResDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-
+    @Transactional
     public void logout(LogoutReqDto reqDto) {
         // 1. 토큰 추출
         String accessToken = reqDto.getAccessToken();
@@ -70,8 +73,37 @@ public class UserService {
 
         // 3. RedisService에서 Redis에 블랙리스트로 저장
         redisService.saveBlacklist(accessToken, remainTimeAccessToken, refreshToken, remainTimeRefreshToken);
-
     }
 
+    public LoginResDto refreshToken(String refreshToken) {
+
+        // 1. RefreshToken 검증
+        jwtUtil.validateToken(refreshToken);
+
+        // 2. RefreshToken이 블랙리스트인지 확인
+        jwtUtil.validateRefreshTokenBlackList(refreshToken);
+
+        // 3. user 조회
+        String username = jwtUtil.getUsername(refreshToken);
+
+        User user = userMapper.findUserByUsername(username);
+
+        if (user == null) {
+            throw new UserException(USER_NOT_FOUND);
+        }
+
+        // 5. 사용된 리프레시 토큰을 블랙리스트로 저장
+        redisService.saveRefreshBlackList(refreshToken, jwtUtil.getRemainingExpirationMillis(refreshToken));
+
+        // 6. Token에 사용자 정보를 담기
+        String accessToken = jwtProvider.createAccessToken(user.getUsername(), Role.USER);
+        String newRefreshToken = jwtProvider.createRefreshToken(user.getUsername(), Role.USER);
+
+        return LoginResDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(newRefreshToken)
+                .build();
+
+    }
 
 }
