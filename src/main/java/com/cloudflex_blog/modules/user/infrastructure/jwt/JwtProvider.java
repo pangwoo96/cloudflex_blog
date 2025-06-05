@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 
 @Component // 빈 등록
@@ -38,5 +39,38 @@ public class JwtProvider {
         );
         this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
     }
+//    public String createToken(JwtTokenReqDto reqDto, Long expiredMs, String type) {
+//        Date now = new Date();
+//        return Jwts.builder()
+//                .subject(String.valueOf(reqDto.getUserId()))
+//                .claim(USERNAME, reqDto.getUsername())
+//                .claim(NICKNAME_CLAIM, reqDto.getNickname())
+//                .claim(EMAIL_CLAIM, reqDto.getEmail())
+//                .claim(NAME_CLAIM, reqDto.getName())
+//                .claim(ROLE, reqDto.getRole())
+//                .claim(TYPE, type)
+//                .issuedAt(now)
+//                .expiration(new Date(now.getTime() + expiredMs))
+//                .signWith(secretKey)
+//                .compact();
+//    }
+//
+//    /**
+//     * Access Token 생성 로직
+//     * @param dto
+//     * @return AccessToken
+//     */
+//    public String createAccessToken(JwtTokenReqDto dto) {
+//        return createToken(dto, accessTokenExpiration, "access");
+//    }
+//
+//    /**
+//     * Refresh Token 생성 로직
+//     * @param dto
+//     * @return Refresh Token
+//     */
+//    public String createRefreshToken(JwtTokenReqDto dto) {
+//        return createToken(dto, refreshTokenExpiration, "refresh");
+//    }
 
-    }
+}

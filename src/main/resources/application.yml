@@ -5,6 +5,11 @@ spring:
   profiles:
     active: local
 
+  config:
+    import:
+      - optional:file:.env
+
+
   datasource:
     url: jdbc:postgresql://localhost:5432/cloudflex_db
     username: cloudflex_user
