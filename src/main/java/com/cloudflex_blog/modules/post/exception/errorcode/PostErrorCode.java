@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
-public class PostErrorCode {
+public enum PostErrorCode {
+
+    WRONG_CSP_TYPE("올바르지 않은 CSP 타입입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus status;

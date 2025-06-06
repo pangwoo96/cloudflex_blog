@@ -29,10 +29,8 @@ public class UserService {
 
     @Transactional
     public void signUp(SignUpReqDto reqDto) {
-        String username = reqDto.getUsername();
-        String password = reqDto.getPassword();
 
-        User user = User.of(username, password);
+        User user = User.of(reqDto.getUsername(), reqDto.getPassword());
         userMapper.save(user);
     }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cloudflex_blog.modules.post.infrastructure.mapper.PostMapper">
+
+    <insert id="save" parameterType="com.cloudflex_blog.modules.post.domain.entity.Post"
+            useGeneratedKeys="true" keyProperty="postId">
+        INSERT INTO posts (title, content, image_url, csp_type, user_id)
+        VALUES (#{title}, #{content}, #{imageUrl}, #{cspType}, #{userId});
+    </insert>
+
+</mapper>
