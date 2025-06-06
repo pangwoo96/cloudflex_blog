@@ -27,6 +27,18 @@ public class Post {
                 .cspType(CSPType.valueOf(cspType))
                 .userId(userId)
                 .build();
+    }
 
+    public void updateImage(String imageUrl, CSPType cspType) {
+        this.imageUrl = imageUrl;
+        this.cspType = cspType;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 }

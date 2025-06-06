@@ -5,10 +5,41 @@
 
 <mapper namespace="com.cloudflex_blog.modules.post.infrastructure.mapper.PostMapper">
 
+    <!-- Post 저장 -->
+
     <insert id="save" parameterType="com.cloudflex_blog.modules.post.domain.entity.Post"
             useGeneratedKeys="true" keyProperty="postId">
         INSERT INTO posts (title, content, image_url, csp_type, user_id)
         VALUES (#{title}, #{content}, #{imageUrl}, #{cspType}, #{userId});
     </insert>
+
+    <!-- Post 조회 -->
+    <select id="findPostByPostId" parameterType="long" resultType="com.cloudflex_blog.modules.post.domain.entity.Post">
+        SELECT
+            post_id AS postId,
+            title,
+            content,
+            image_url AS imageUrl,
+            csp_type AS cspType,
+            created_at AS createdAt,
+            updated_at AS updatedAt,
+            user_id AS userId
+        FROM posts
+        WHERE post_id = #{postId}
+    </select>
+
+    <!-- Post 수정 -->
+    <update id="updatePost" parameterType="com.cloudflex_blog.modules.post.domain.entity.Post">
+        UPDATE posts
+        <set>
+            <if test="title != null"> title = #{title}, </if>
+            <if test="content != null"> content = #{content}, </if>
+            <if test="imageUrl != null"> image_url = #{imageUrl}, </if>
+            <if test="cspType != null"> csp_type = #{cspType}, </if>
+            updated_at = CURRENT_TIMESTAMP
+        </set>
+        WHERE post_id = #{postId}
+    </update>
+
 
 </mapper>

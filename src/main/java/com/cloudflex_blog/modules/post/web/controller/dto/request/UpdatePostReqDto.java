@@ -1,23 +1,25 @@
-package com.cloudflex_blog.modules.post.web.controller.dto.response;
+package com.cloudflex_blog.modules.post.web.controller.dto.request;
 
-import com.cloudflex_blog.modules.post.domain.enums.CSPType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter @Builder
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePostResDto {
+public class UpdatePostReqDto {
+
+    private Long postId;
 
     private String title;
 
     private String content;
 
-    private String imageUrl;
+    private String newImageUrl;
 
-    private String cspType;
+    private String newCspType;
 
     private Long userId;
 }
